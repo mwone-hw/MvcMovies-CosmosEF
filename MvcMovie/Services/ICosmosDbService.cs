@@ -1,15 +1,15 @@
 ﻿namespace MvcMovie
 {
+    using MvcMovie.Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using MvcMovie.Models;
 
     public interface ICosmosDbService
     {
-        Task<IEnumerable<Movie>> GetItemsAsync(string query);
-        Task<Movie> GetItemAsync(string id);
-        Task AddItemAsync(Movie item);
-        Task UpdateItemAsync(string id, Movie item);
+        Task<IEnumerable<MovieViewModel>> GetItemsAsync(string query);
+        Task<MovieViewModel> GetItemAsync(string id);
+        Task AddItemAsync(MovieViewModel item);
+        Task UpdateItemAsync(string id, MovieViewModel item);
         Task DeleteItemAsync(string id);
     }
 }

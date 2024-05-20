@@ -1,94 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.EntityFrameworkCore;
-using MvcMovie.Data;
 using MvcMovie.Models;
 
 namespace MvcMovie.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly MvcMovieContext _context;
+        ICosmosDbService _cosmosDbService;
 
-        public MoviesController(MvcMovieContext context)
+        public MoviesController(ICosmosDbService cosmosDbService)
         {
-            _context = context;
+            _cosmosDbService = cosmosDbService;
         }
 
-        // GET: Movies
+        // GET: Movie
+        [ActionName("Index")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movie.ToListAsync());
+            return View(await _cosmosDbService.GetItemsAsync("SELECT * FROM c"));
         }
 
-        // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Movie/Details/5
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            //var movieViewModel = await _context.MovieViewModel
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            var movieViewModel = await _cosmosDbService.GetItemAsync(id);
+
+            if (movieViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(movieViewModel);
         }
 
-        // GET: Movies/Create
+        // GET: Movie/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        // POST: Movie/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,PartitionKey")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price")] MovieViewModel movieViewModel)
         {
+            //movieViewModel.Id = Guid.NewGuid().ToString();
+
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await _cosmosDbService.AddItemAsync(movieViewModel);
+                return RedirectToAction("Index");
             }
-            return View(movie);
+
+            return View();
         }
 
-        // GET: Movies/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Movie/Edit/5
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie == null)
+            //var movieViewModel = await _context.MovieViewModel.FindAsync(id);
+            var movieViewModel = await _cosmosDbService.GetItemAsync(id);
+            Console.WriteLine(movieViewModel);
+            if (movieViewModel == null)
             {
                 return NotFound();
             }
-            return View(movie);
+            return View(movieViewModel);
         }
 
-        // POST: Movies/Edit/5
+        // POST: Movie/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price,PartitionKey")] Movie movie)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,ReleaseDate,Genre,Price")] MovieViewModel movieViewModel)
         {
-            if (id != movie.Id)
+            if (id != movieViewModel.Id)
             {
                 return NotFound();
             }
@@ -97,12 +99,13 @@ namespace MvcMovie.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
+                    //_context.Update(movieViewModel);
+                    //await _context.SaveChangesAsync();
+                    await _cosmosDbService.UpdateItemAsync(movieViewModel.Id, movieViewModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!MovieViewModelExists(movieViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -113,45 +116,49 @@ namespace MvcMovie.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View();
         }
 
-        // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Movie/Delete/5
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            //var movieViewModel = await _context.MovieViewModel
+            //.FirstOrDefaultAsync(m => m.Id == id);
+            var movieViewModel = await _cosmosDbService.GetItemAsync(id);
+
+            if (movieViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(movieViewModel);
         }
 
-        // POST: Movies/Delete/5
+        // POST: Movie/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie != null)
-            {
-                _context.Movie.Remove(movie);
-            }
+            //var movieViewModel = await _context.MovieViewModel.FindAsync(id);
+            var movieViewModel = await _cosmosDbService.GetItemAsync(id);
+            if (movieViewModel != null)
+                //{
+                //_context.MovieViewModel.Remove(movieViewModel);
+                await _cosmosDbService.DeleteItemAsync(id);
+            //}
 
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private bool MovieViewModelExists(string id)
         {
-            return _context.Movie.Any(e => e.Id == id);
+            return !_cosmosDbService.GetItemAsync(id).IsNull();
         }
     }
 }

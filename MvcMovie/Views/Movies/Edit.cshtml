@@ -1,4 +1,4 @@
-﻿@model MvcMovie.Models.Movie
+﻿@model MvcMovie.Models.MovieViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,11 +6,11 @@
 
 <h1>Edit</h1>
 
-<h4>Movie</h4>
+<h4>MovieViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -33,7 +33,6 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="PartitionKey" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

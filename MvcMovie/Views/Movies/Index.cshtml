@@ -1,61 +1,53 @@
-﻿@model IEnumerable<MvcMovie.Models.Movie>
+﻿@model IEnumerable<MvcMovie.Models.MovieViewModel>
 
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
 <p>
-	<a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.PartitionKey)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Title)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ReleaseDate)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Genre)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Price)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.PartitionKey)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Title)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ReleaseDate)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Genre)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Price)
-				</td>
-				<td>
-					<!-- TODO: Find ways for look ups -->
-					@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-					@Html.ActionLink("Details", "Details", new { PartitionKey = item.PartitionKey }) |
-					@Html.ActionLink("Delete", "Delete", new { PartitionKey = item.PartitionKey })
-				</td>
-			</tr>
-		}
-	</tbody>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
 </table>
