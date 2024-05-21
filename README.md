@@ -1,4 +1,5 @@
-Followed [MVC project guide](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio) till [step 4 Model Scaffolding](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio)
+Followed [MVC project guide](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio) till [step 4 Model Scaffolding](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-8.0&tabs=visual-studio).
+
 Instead of using SQL server as Database provider, this project used CosmosDB to investigate difference between SQL and Cosmos in EF.
 
 Main difference: 
