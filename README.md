@@ -6,4 +6,4 @@ Main difference:
 - Container and Partition Key configuration in [DBContext](https://github.com/mwone-hw/MvcMovies-CosmosEF/blob/master/MvcMovie/Data/MvcMovieContext.cs#L17)
 - Connection setup in [Program](https://github.com/mwone-hw/MvcMovies-CosmosEF/blob/master/MvcMovie/Program.cs#L6)
 
-Note: The CosmosDBService classes are irrelevant when using EF
+For the CosmosDB SDK dmeo, see [sdk-dev branch](https://github.com/mwone-hw/MvcMovies-CosmosEF/tree/sdk-dev)
