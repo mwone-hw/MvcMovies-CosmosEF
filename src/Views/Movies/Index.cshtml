@@ -13,7 +13,7 @@
 	<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.PartitionKey)
+				@Html.DisplayNameFor(model => model.Id)
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.Title)
@@ -35,9 +35,6 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.PartitionKey)
-				</td>
-				<td>
 					@Html.DisplayFor(modelItem => item.Title)
 				</td>
 				<td>
@@ -52,8 +49,8 @@
 				<td>
 					<!-- TODO: Find ways for look ups -->
 					@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-					@Html.ActionLink("Details", "Details", new { PartitionKey = item.PartitionKey }) |
-					@Html.ActionLink("Delete", "Delete", new { PartitionKey = item.PartitionKey })
+					@Html.ActionLink("Details", "Details", new { id = item.Id }) |
+					@Html.ActionLink("Delete", "Delete", new { id = item.Id })
 				</td>
 			</tr>
 		}
