@@ -9,3 +9,7 @@ Main difference:
 - Container and Partition Key configuration in [DBContext](https://github.com/mwone-hw/MvcMovies-CosmosEF/blob/master/MvcMovie/Data/MvcMovieContext.cs#L17)
 - Connection setup in [Program](https://github.com/mwone-hw/MvcMovies-CosmosEF/blob/master/MvcMovie/Program.cs#L6)
 
+# Deployment
+- Clone this repo to Visual Studio
+- Creates CosmosDB account, create database named "cosmicworks", create container named "Movies" with partition key "/id"
+- Replace authentication method in appsettings.json (e.g. connection string, Account + Key)
