@@ -14,14 +14,14 @@ namespace MvcMovie.Controllers
             _cosmosDbService = cosmosDbService;
         }
 
-        // GET: Movie
+        // GET: Movies
         [ActionName("Index")]
         public async Task<IActionResult> Index()
         {
             return View(await _cosmosDbService.GetItemsAsync("SELECT * FROM c"));
         }
 
-        // GET: Movie/Details/5
+        // GET: Movies/Details/5
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
@@ -41,23 +41,22 @@ namespace MvcMovie.Controllers
             return View(movieViewModel);
         }
 
-        // GET: Movie/Create
+        // GET: Movies/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movie/Create
+        // POST: Movies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price")] Movie movieViewModel)
         {
-            //movieViewModel.Id = Guid.NewGuid().ToString();
-
             if (ModelState.IsValid)
             {
+                //movieViewModel.Id = Guid.NewGuid().ToString();
                 await _cosmosDbService.AddItemAsync(movieViewModel);
                 return RedirectToAction("Index");
             }
@@ -65,7 +64,7 @@ namespace MvcMovie.Controllers
             return View();
         }
 
-        // GET: Movie/Edit/5
+        // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(string? id)
         {
             if (id == null)
@@ -83,12 +82,12 @@ namespace MvcMovie.Controllers
             return View(movieViewModel);
         }
 
-        // POST: Movie/Edit/5
+        // POST: Movies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,ReleaseDate,Genre,Price")] MovieViewModel movieViewModel)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Title,ReleaseDate,Genre,Price")] Movie movieViewModel)
         {
             if (id != movieViewModel.Id)
             {
@@ -119,7 +118,7 @@ namespace MvcMovie.Controllers
             return View();
         }
 
-        // GET: Movie/Delete/5
+        // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
@@ -139,7 +138,7 @@ namespace MvcMovie.Controllers
             return View(movieViewModel);
         }
 
-        // POST: Movie/Delete/5
+        // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -147,10 +146,10 @@ namespace MvcMovie.Controllers
             //var movieViewModel = await _context.MovieViewModel.FindAsync(id);
             var movieViewModel = await _cosmosDbService.GetItemAsync(id);
             if (movieViewModel != null)
-                //{
+            {
                 //_context.MovieViewModel.Remove(movieViewModel);
                 await _cosmosDbService.DeleteItemAsync(id);
-            //}
+            }
 
             //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

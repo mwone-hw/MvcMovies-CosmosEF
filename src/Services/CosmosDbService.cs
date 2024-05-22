@@ -18,21 +18,21 @@
             this._container = dbClient.GetContainer(databaseName, containerName);
         }
 
-        public async Task AddItemAsync(MovieViewModel movie)
+        public async Task AddItemAsync(Movie movie)
         {
-            await this._container.CreateItemAsync<MovieViewModel>(movie, new PartitionKey(movie.Id));
+            await this._container.CreateItemAsync<Movie>(movie, new PartitionKey(movie.Id));
         }
 
         public async Task DeleteItemAsync(string id)
         {
-            await this._container.DeleteItemAsync<MovieViewModel>(id, new PartitionKey(id));
+            await this._container.DeleteItemAsync<Movie>(id, new PartitionKey(id));
         }
 
-        public async Task<MovieViewModel> GetItemAsync(string id)
+        public async Task<Movie> GetItemAsync(string id)
         {
             try
             {
-                ItemResponse<MovieViewModel> response = await this._container.ReadItemAsync<MovieViewModel>(id, new PartitionKey(id));
+                ItemResponse<Movie> response = await this._container.ReadItemAsync<Movie>(id, new PartitionKey(id));
                 return response.Resource;
             }
             catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
@@ -42,10 +42,10 @@
 
         }
 
-        public async Task<IEnumerable<MovieViewModel>> GetItemsAsync(string queryString)
+        public async Task<IEnumerable<Movie>> GetItemsAsync(string queryString)
         {
-            var query = this._container.GetItemQueryIterator<MovieViewModel>(new QueryDefinition(queryString));
-            List<MovieViewModel> results = new List<MovieViewModel>();
+            var query = this._container.GetItemQueryIterator<Movie>(new QueryDefinition(queryString));
+            List<Movie> results = new List<Movie>();
             while (query.HasMoreResults)
             {
                 var response = await query.ReadNextAsync();
@@ -56,9 +56,9 @@
             return results;
         }
 
-        public async Task UpdateItemAsync(string id, MovieViewModel item)
+        public async Task UpdateItemAsync(string id, Movie item)
         {
-            await this._container.UpsertItemAsync<MovieViewModel>(item, new PartitionKey(id));
+            await this._container.UpsertItemAsync<Movie>(item, new PartitionKey(id));
         }
     }
 }
